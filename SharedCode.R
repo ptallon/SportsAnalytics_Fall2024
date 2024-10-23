@@ -8,7 +8,7 @@
 load_packages <- function(packages = c()) {
   if (length(packages) == 0) {
     print('You did not specify any packages/libraries to load')
-  }
+  } 
   else {
     for (i in packages){
       if(! i %in% installed.packages()){
@@ -39,7 +39,7 @@ check_playId_gameId <- function(data,
     if (!frame_Id %in% unique(df$frameId)) {
       return("the frameId you want is not in the data frame for this particular gameId and playId.")
     } 
-  }  
+  } 
   return("ok")
 }
 
@@ -94,6 +94,10 @@ load_data_for_one_week <- function(directory,
   
   return(df)
 }
+
+
+
+
 
 test_print <- function() {
   print("this is a test print function")
