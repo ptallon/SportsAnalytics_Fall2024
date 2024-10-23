@@ -73,11 +73,12 @@ load_data_for_one_week <- function(directory,
     players     <- fread(paste0(directory, "/players.csv"))         #   1697 rows x  7 columns
     games       <- fread(paste0(directory, "/games.csv"))           #    136 rows x  9 columns
     player_play <- fread(paste0(directory, "/player_play.csv"))     # 354727 rows x 50 columns
+
+    df <- left_join(df, games,       by = c("gameId"))
+    df <- left_join(df, plays,       by = c("gameId", "playId"))
+    df <- left_join(df, players,     by = c("nflId", "displayName"))
+    df <- left_join(df, player_play, by = c("gameId", "playId", "nflId"))
     
-    df <- merge(df, plays, by = c("gameId", "playId"), all.x = TRUE)
-    df <- merge(df, players, by = c("nflId"), all.x = TRUE)
-    df <- merge(df, pff, by = c("gameId", "playId", "nflId"), all.x = TRUE)
-    df <- merge(df, games, by = c("gameId"), all.x = TRUE)
   }
   
   df <- df %>%
