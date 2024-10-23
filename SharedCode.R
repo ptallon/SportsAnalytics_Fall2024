@@ -83,7 +83,7 @@ load_data_for_one_week <- function(directory,
   df <- df %>%
     mutate( x = ifelse(playDirection == "right", 120-x, x),
             y = ifelse(playDirection == "right", 160/3-y, y ),
-            team = factor(team, 
+            team = factor(club, 
                           levels = c("football",   "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", 
                                      "CIN", "CLE", "DAL", "DEN", "DET", "GB",  "HOU", "IND", 
                                      "JAX", "KC",  "LA",  "LAC", "LV",  "MIA", "MIN", "NE",  
@@ -95,8 +95,100 @@ load_data_for_one_week <- function(directory,
   return(df)
 }
 
+# ---------------------------------------------------------------------------------
+# -------------------- Load & Merge Data for Specified Weeks ----------------------
+# ---------------------------------------------------------------------------------
+# read in data files for specified weeks and row bind them together to form a single
+# data frame
+load_data_for_specified_weeks <- function(directory, 
+                                          these_weeks = c(1, 2, 3, 4, 5, 6, 7, 8, 9),
+                                          merge = F) {
+  for (week in these_weeks) {
+    df <- load_data_for_one_week(directory, week, merge)
+    if (week == these_weeks[1]) {
+      big_df <- data.frame(df)
+    }
+    else {
+      big_df <- rbind(big_df, df)
+    }
+  }
+  return(big_df)
+}
 
 
+# ---------------------------------------------------------------------------------
+# -------------------- Load & Merge Data for All Weeks ----------------------
+# ---------------------------------------------------------------------------------
+# read in data files for all weeks and row bind them together to form a single
+# data frame
+load_data_for_all_weeks <- function(directory, 
+                                    merge = F) {
+  for (week in seq(1,9)) {
+    df <- load_data_for_one_week(directory, week, merge)
+    if (week == 1) {
+      big_df <- data.frame(df)
+    }
+    else {
+      big_df <- rbind(big_df, df)
+    }
+  }
+  return(big_df)
+}
+
+# ---------------------------------------------------------------------------------
+# ---------------------- Animate a Single Play in a Game --- ----------------------
+# ---------------------------------------------------------------------------------
+# pass in a dataframe where you have filtered the gameId and the playId.
+
+visualize_single_play <- function(game_df) {
+  
+  if(!length(unique(game_df$gameId)) == 1) {
+    stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
+  }  
+  
+  library(hms)
+  
+  source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
+  
+  g <- ggplot(data = game_df, aes(x = x, y = y)) +
+    # customize colors, shapes, and sizes of players and the football
+    scale_size_manual(values = c(6, 4, 6), guide = "none") +
+    scale_shape_manual(values = c(21, 16, 21), guide = "none") +
+    scale_fill_manual(values = c("dodgerblue1", "#663300", "firebrick1"), guide = "none") +
+    scale_colour_manual(values = c("black", "#663300", "black"), guide = "none") +
+    
+    gg_field(yardmin = -5, yardmax = 125) +
+    
+    # add points to plot for all players and the football
+    geom_point(data = game_df, aes(x = x, y = y, shape = team, colour = team, size = team, fill = team) ) +
+    
+    # insert jersey number for each player
+    geom_text( data = game_df %>% filter(team != "football"),
+               aes(x = x, y = y, 
+                   label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
+    
+    # add some labels to report the play description
+    labs(title = game_df$playDescription) +
+    
+    # set the theme to dark green to color the areas beyond the end zones
+    theme(panel.background = element_rect(fill = "forestgreen", 
+                                          color = "forestgreen"), panel.grid = element_blank()) +
+    guides(alpha = "none") +
+    transition_time(frameId)
+  
+  frames_to_display <- length(unique(game_df$frameId))
+  game_df$hms <- as_hms(game_df$time)
+  game_df$seconds <- hour(game_df$hms)*3600 + minute(game_df$hms)*60 + second(game_df$hms)
+  fps <- frames_to_display/(max(game_df$seconds) - min(game_df$seconds))
+  
+  animate(g, 
+          fps=fps, 
+          nframe = frames_to_display, 
+          width = 480, 
+          height = 280, 
+          renderer = gifski_renderer() 
+  ) 
+}
 
 
 test_print <- function() {
