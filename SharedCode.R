@@ -147,7 +147,7 @@ visualize_single_play <- function(game_df) {
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
   }  
   
-  library(hms)
+  load_packages(c("hms"))
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
@@ -158,7 +158,10 @@ visualize_single_play <- function(game_df) {
     scale_fill_manual(values = c("dodgerblue1", "#663300", "firebrick1"), guide = "none") +
     scale_colour_manual(values = c("black", "#663300", "black"), guide = "none") +
     
-    gg_field(yardmin = -5, yardmax = 125) +
+    yardmin <- min(-5, min(game_df$x) - 5)
+    yardmax <- max(125, max(game_df$y) + 5)
+    
+    gg_field(yardmin = yardmin, yardmax = yardmax) +
     
     # add points to plot for all players and the football
     geom_point(data = game_df, aes(x = x, y = y, shape = team, colour = team, size = team, fill = team) ) +
