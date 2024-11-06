@@ -153,6 +153,8 @@ visualize_single_play <- function(game_df) {
   
   yardmin <- min(-5, min(game_df$x) - 5)
   yardmax <- max(125, max(game_df$y) + 5)
+  print(yardmax)
+  print(yardmin)
   
   g <- ggplot(data = game_df, aes(x = x, y = y)) +
     # customize colors, shapes, and sizes of players and the football
