@@ -151,15 +151,15 @@ visualize_single_play <- function(game_df) {
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
+  yardmin <- min(-5, min(game_df$x) - 5)
+  yardmax <- max(125, max(game_df$y) + 5)
+  
   g <- ggplot(data = game_df, aes(x = x, y = y)) +
     # customize colors, shapes, and sizes of players and the football
     scale_size_manual(values = c(6, 4, 6), guide = "none") +
     scale_shape_manual(values = c(21, 16, 21), guide = "none") +
     scale_fill_manual(values = c("dodgerblue1", "#663300", "firebrick1"), guide = "none") +
     scale_colour_manual(values = c("black", "#663300", "black"), guide = "none") +
-    
-    yardmin <- min(-5, min(game_df$x) - 5)
-    yardmax <- max(125, max(game_df$y) + 5)
     
     gg_field(yardmin = yardmin, yardmax = yardmax) +
     
