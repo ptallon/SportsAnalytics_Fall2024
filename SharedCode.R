@@ -141,7 +141,8 @@ load_data_for_all_weeks <- function(directory,
 # ---------------------------------------------------------------------------------
 # pass in a dataframe where you have filtered the gameId and playId.
 
-visualize_single_play <- function(game_df) {
+visualize_single_play <- function(game_df,
+                                  highlight_players_in_motion = FALSE) {
   
   if(!length(unique(game_df$gameId)) == 1) {
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
@@ -161,8 +162,14 @@ visualize_single_play <- function(game_df) {
     gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) +
     
     # add points to plot for all players and the football
-    geom_point(data = game_df, aes(x = x, y = y, shape = team, colour = team, size = team, fill = team) ) +
-    
+    geom_point(data = game_df, aes(x = x, y = y, shape = team, colour = team, size = team, fill = team))
+  
+  if(highlight_players_in_motion) {
+    g <- g + 
+      geom_point(data = game_df %>% filter(inMotionAtBallSnap == T), aes(x = x, y = y, shape = team, colour = "black", size = team, fill = "black"))
+  }
+  
+  g <- g +
     # insert jersey number for each player
     geom_text( data = game_df %>% filter(team != "football"),
                aes(x = x, y = y, 
@@ -189,9 +196,4 @@ visualize_single_play <- function(game_df) {
           height = 280, 
           renderer = gifski_renderer() 
   ) 
-}
-
-
-test_print <- function() {
-  print("this is a test print function")
 }
