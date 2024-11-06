@@ -139,7 +139,7 @@ load_data_for_all_weeks <- function(directory,
 # ---------------------------------------------------------------------------------
 # ---------------------- Animate a Single Play in a Game --- ----------------------
 # ---------------------------------------------------------------------------------
-# pass in a dataframe where you have filtered the gameId and the playId.
+# pass in a dataframe where you have filtered the gameId and playId.
 
 visualize_single_play <- function(game_df) {
   
