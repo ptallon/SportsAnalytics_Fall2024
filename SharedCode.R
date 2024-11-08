@@ -217,6 +217,7 @@ visualize_single_play <- function(game_df,
 visualize_single_frame <- function(game_df,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
+                                   show_Matchup = FALSE,
                                    frame_number = 1) { 
   
   if(!length(unique(game_df$gameId)) == 1) {
@@ -272,16 +273,20 @@ visualize_single_frame <- function(game_df,
                   fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
   }
   
-  g <- g +
-    geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
-                                                 !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
-                     aes(x = x, y = y,  
-                         label=paste(displayName, "match up", pff_primaryDefensiveCoverageMatchupNflId)),
-                     box.padding = 1,
-                     point.padding = 1,
-                     size = 4,
-                     color = 'Grey50',
-                     segment.color = 'darkblue') 
+  if(showMatchup) {
+    g <- g +
+      geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
+                                                   !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
+                       aes(x = x, y = y,  
+                           label=paste("->", pff_primaryDefensiveCoverageMatchupNflId)),
+                       box.padding = 0,
+                       point.padding = 1,
+                       size = 4,
+                       color = "black",
+                       min.segment.length = 2,
+                       direction = "both",
+                       segment.color = 'darkblue') 
+  }
   
   g <- g +
     # insert jersey number for each player
