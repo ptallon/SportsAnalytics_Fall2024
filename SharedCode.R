@@ -273,7 +273,9 @@ visualize_single_frame <- function(game_df,
   }
   
   g <- g +
-    geom_label_repel(data = game_df %>% filter(inMotionAtBallSnap == T), aes(x = x, y = y, label=displayName),
+    geom_label_repel(data = game_df %>% filter(inMotionAtBallSnap == T), 
+                     aes(x = x, y = y,  
+                         label=paste(displayName, "match up", pff_primaryDefensiveCoverageMatchupNflId)),
                      box.padding = 1,
                      point.padding = 1,
                      size = 4,
