@@ -279,7 +279,7 @@ visualize_single_frame <- function(game_df,
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
     
     # add some labels to report the play description
-    labs(title = game_df$playDescription, plot.title=theme_text(size=title.size)) +
+    labs(title = game_df$playDescription, plot.title=element_text(size=title.size)) +
     
     # set the theme to dark green to color the areas beyond the end zones
     theme(panel.background = element_rect(fill = "forestgreen", 
