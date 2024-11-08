@@ -268,7 +268,7 @@ visualize_single_frame <- function(game_df,
                   colour = "hotpink",
                   size = 7,
                   stroke = 1,
-                  fill = "hotpink"))
+                  fill = "hotpink")
   }
   
   g <- g +
