@@ -278,7 +278,7 @@ visualize_single_frame <- function(game_df,
       geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                                                    !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
                        aes(x = x, y = y,  
-                           label=paste("->", matchup_jerseyNumber1, 
+                           label=paste("\u2192", matchup_jerseyNumber1, 
                                        ifelse(!is.na(pff_secondaryDefensiveCoverageMatchupNflId), 
                                               matchup_jerseyNumber2, 
                                               ""))), 
