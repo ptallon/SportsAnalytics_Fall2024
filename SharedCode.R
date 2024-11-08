@@ -156,7 +156,7 @@ visualize_single_play <- function(game_df,
     # customize colors, shapes, and sizes of players and the football
     scale_size_manual(values = c(6, 4, 6), guide = "none") +
     scale_shape_manual(values = c(21, 16, 21), guide = "none") +
-    scale_fill_manual(values = c("firebrick1", "black", "white", "dodgerblue1"), 
+    scale_fill_manual(values = c("firebrick1", "black", "dodgerblue1", "white"), 
                       na.value = NA,
                       guide="none") + 
     scale_colour_manual(values = c("black", "#663300", "black","black"), 
