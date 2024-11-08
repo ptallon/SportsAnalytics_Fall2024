@@ -278,7 +278,7 @@ visualize_single_frame <- function(game_df,
                      point.padding = 1,
                      size = 4,
                      color = 'Grey50',
-                     segment.color = 'darkblue') +
+                     segment.color = 'darkblue') 
   
   g <- g +
     # insert jersey number for each player
