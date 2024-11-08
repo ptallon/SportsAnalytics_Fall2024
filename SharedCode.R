@@ -156,7 +156,7 @@ visualize_single_play <- function(game_df,
     # customize colors, shapes, and sizes of players and the football
     scale_size_manual(values = c(6, 4, 6), guide = "none") +
     scale_shape_manual(values = c(21, 16, 21), guide = "none") +
-    scale_fill_manual(values = c("firebrick1", "black", "dodgerblue1","white"), 
+    scale_fill_manual(values = c("firebrick1", "black", "white", "dodgerblue1"), 
                       na.value = NA,
                       guide="none") + 
     scale_colour_manual(values = c("black", "#663300", "black","black"), 
@@ -206,3 +206,69 @@ visualize_single_play <- function(game_df,
           renderer = gifski_renderer() 
   ) 
 }
+
+
+
+# -----------------------------------------------------------------------------------
+# ---------------------- Visualize a Single Play in a Game --- ----------------------
+# -----------------------------------------------------------------------------------
+# pass in a dataframe where you have filtered the gameId and playId.
+
+visualize_single_frame <- function(game_df,
+                                   highlight_players_in_motion = FALSE,
+                                   frame_number = 1) {
+  
+  if(!length(unique(game_df$gameId)) == 1) {
+    stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
+  }  
+  
+  if(!frame_number %in% game_df$frameId) {
+    stop('The frame number you are looking to view is not in the data frame. Please check the frame number.')
+  }
+  
+  source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
+  
+  g <- ggplot(data = game_df, aes(x = x, y = y), color=team, fill=team) +
+    # customize colors, shapes, and sizes of players and the football
+    scale_size_manual(values = c(6, 4, 6), guide = "none") +
+    scale_shape_manual(values = c(21, 16, 21), guide = "none") +
+    scale_fill_manual(values = c("firebrick1", "black", "white", "dodgerblue1"), 
+                      na.value = NA,
+                      guide="none") + 
+    scale_colour_manual(values = c("black", "#663300", "black","black"), 
+                        na.value = NA,
+                        guide="none") + 
+    
+    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) +
+    
+    # add points to plot for all players and the football
+    geom_point(aes(shape = team, colour = team, size = team, fill = team))
+  
+  if(highlight_players_in_motion) {
+    g <- g + 
+      geom_point(data = game_df %>% filter(inMotionAtBallSnap == T), 
+                 aes(x = x, y = y), 
+                 shape = 21, 
+                 colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
+                 size = 6, 
+                 fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
+  }
+  
+  g <- g +
+    # insert jersey number for each player
+    geom_text( data = game_df %>% filter(team != "football"),
+               aes(x = x, y = y, 
+                   label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
+    
+    # add some labels to report the play description
+    labs(title = game_df$playDescription) +
+    
+    # set the theme to dark green to color the areas beyond the end zones
+    theme(panel.background = element_rect(fill = "forestgreen", 
+                                          color = "forestgreen"), panel.grid = element_blank()) +
+    guides(alpha = "none") +
+    transition_time(frameId)
+
+  g  
+}
+
