@@ -226,6 +226,9 @@ visualize_single_frame <- function(game_df,
     stop('The frame number you are looking to view is not in the data frame. Please check the frame number.')
   }
   
+  load_packages(c("dplyr"))
+  
+  print(frame_number)
   game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
