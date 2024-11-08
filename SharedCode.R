@@ -217,7 +217,7 @@ visualize_single_play <- function(game_df,
 visualize_single_frame <- function(game_df,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
-                                   frame_number = 1) {
+                                   frame_number = 1) { 
   
   if(!length(unique(game_df$gameId)) == 1) {
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
