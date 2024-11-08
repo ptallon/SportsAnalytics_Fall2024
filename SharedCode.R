@@ -278,12 +278,11 @@ visualize_single_frame <- function(game_df,
       geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                                                    !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
                        aes(x = x, y = y,  
-                           label=paste("->", pff_primaryDefensiveCoverageMatchupNflId)),
-                       box.padding = 0,
+                           label=paste("->", matchup_jerseyNumber)),
+                       box.padding = 1,
                        point.padding = 1,
                        size = 4,
                        color = "black",
-                       min.segment.length = 2,
                        direction = "both",
                        segment.color = 'darkblue')  
   }
