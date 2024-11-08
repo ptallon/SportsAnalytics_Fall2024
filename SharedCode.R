@@ -261,7 +261,7 @@ visualize_single_frame <- function(game_df,
   
   if(highlight_matchup) {
     g <- g +
-      geom_point( game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
+      geom_point( data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                         !is.na(pff_secondaryDefensiveCoverageMatchupNflId)),
                   aes(x = x, y = y),
                   shape = 21,
