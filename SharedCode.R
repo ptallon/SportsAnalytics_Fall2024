@@ -227,7 +227,7 @@ visualize_single_frame <- function(game_df,
     stop('The frame number you are looking to view is not in the data frame. Please check the frame number.')
   }
   
-  load_packages(c("dplyr", "stringr"))
+  load_packages(c("dplyr", "stringr", "ggrepel"))
   
   game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
@@ -273,13 +273,21 @@ visualize_single_frame <- function(game_df,
   }
   
   g <- g +
+    geom_label_repel(data = game_df %>% filter(inMotionAtBallSnap == T), aes(x = x, y = y, label=displayName),
+                     box.padding = 1,
+                     point.padding = 1,
+                     size = 4,
+                     color = 'Grey50',
+                     segment.color = 'darkblue') +
+  
+  g <- g +
     # insert jersey number for each player
     geom_text( data = game_df %>% filter(team != "football"),
                aes(x = x, y = y, 
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
     
     # add some labels to report the play description
-    labs(title = str_wrap(game_df$playDescription), 60) +
+    labs(title = str_wrap(game_df$playDescription), 30) +
     
     # set the theme to dark green to color the areas beyond the end zones
     theme(panel.background = element_rect(fill = "forestgreen", 
