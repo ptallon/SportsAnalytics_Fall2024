@@ -285,7 +285,7 @@ visualize_single_frame <- function(game_df,
                        color = "black",
                        min.segment.length = 2,
                        direction = "both",
-                       segment.color = 'darkblue') 
+                       segment.color = 'darkblue')  
   }
   
   g <- g +
