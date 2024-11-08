@@ -244,31 +244,32 @@ visualize_single_frame <- function(game_df,
                         na.value = NA,
                         guide="none") + 
     
-    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) +
+    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) 
+  
+    # highlight with a pink halo those defensive players who are matched up with an offensive player
+    if(highlight_matchup) {
+      g <- g +
+        geom_point( data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
+                                                !is.na(pff_secondaryDefensiveCoverageMatchupNflId)),
+                    aes(x = x, y = y),
+                    shape = 21,
+                    colour = "hotpink",
+                    size = 8,
+                    stroke = 1,
+                    fill = "hotpink")
+    }
+  
+  # add points to plot for all players and the football
+  g <- g + geom_point(aes(shape = team, colour = team, size = team, fill = team))
     
-    # add points to plot for all players and the football
-    geom_point(aes(shape = team, colour = team, size = team, fill = team))
-  
   if(highlight_players_in_motion) {
-    g <- g + 
-      geom_point(data = game_df %>% filter(inMotionAtBallSnap == T), 
-                 aes(x = x, y = y), 
-                 shape = 21, 
-                 colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
-                 size = 6, 
-                 fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
-  }
-  
-  if(highlight_matchup) {
-    g <- g +
-      geom_point( data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
-                        !is.na(pff_secondaryDefensiveCoverageMatchupNflId)),
-                  aes(x = x, y = y),
-                  shape = 21,
-                  colour = "hotpink",
-                  size = 7,
-                  stroke = 1,
-                  fill = "hotpink")
+     g <- g + 
+       geom_point(data = game_df %>% filter(inMotionAtBallSnap == T), 
+                  aes(x = x, y = y), 
+                  shape = 21, 
+                  colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
+                  size = 6, 
+                  fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
   }
   
   g <- g +
