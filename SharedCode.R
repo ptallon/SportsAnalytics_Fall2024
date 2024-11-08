@@ -225,9 +225,8 @@ visualize_single_frame <- function(game_df,
   if(!frame_number %in% game_df$frameId) {
     stop('The frame number you are looking to view is not in the data frame. Please check the frame number.')
   }
-  else{
-    game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
-  }
+  
+  game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
