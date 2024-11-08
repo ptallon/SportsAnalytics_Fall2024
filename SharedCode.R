@@ -273,7 +273,7 @@ visualize_single_frame <- function(game_df,
                   fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
   }
   
-  if(showMatchup) {
+  if(show_Matchup) {
     g <- g +
       geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                                                    !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
