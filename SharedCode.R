@@ -284,7 +284,7 @@ visualize_single_frame <- function(game_df,
     # set the theme to dark green to color the areas beyond the end zones
     theme(panel.background = element_rect(fill = "forestgreen", 
                                           color = "forestgreen"), panel.grid = element_blank()) +
-    guides(alpha = "none") 
+    guides(alpha = "none")  
 
   g  
 }
