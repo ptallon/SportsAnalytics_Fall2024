@@ -148,7 +148,7 @@ visualize_single_play <- function(game_df,
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
   }  
   
-  load_packages(c("hms"))
+  load_packages(c("hms", "stringr"))
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
@@ -279,7 +279,7 @@ visualize_single_frame <- function(game_df,
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
     
     # add some labels to report the play description
-    labs(title = game_df$playDescription, plot.title=element_text(size=title.size)) + 
+    labs(title = str_wrap(game_df$playDescription), 60) +
     
     # set the theme to dark green to color the areas beyond the end zones
     theme(panel.background = element_rect(fill = "forestgreen", 
