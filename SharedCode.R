@@ -216,6 +216,7 @@ visualize_single_play <- function(game_df,
 
 visualize_single_frame <- function(game_df,
                                    highlight_players_in_motion = FALSE,
+                                   highlight_matchup = FALSE,
                                    frame_number = 1) {
   
   if(!length(unique(game_df$gameId)) == 1) {
@@ -256,6 +257,18 @@ visualize_single_frame <- function(game_df,
                  colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
                  size = 6, 
                  fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
+  }
+  
+  if(highlight_matchup) {
+    g <- g +
+      geom_point( game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
+                        !is.na(pff_secondaryDefensiveCoverageMatchupNflId)),
+                  aes(x = x, y = y),
+                  shape = 21,
+                  colour = "hotpink",
+                  size = 7,
+                  stroke = 1,
+                  fill = "hotpink"))
   }
   
   g <- g +
