@@ -270,7 +270,7 @@ visualize_single_frame <- function(game_df,
                   shape = 21, 
                   colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
                   size = 6, 
-                  fill = ifelse(highlight_players_in_motion == T, "black", "NA"))     
+                  fill = ifelse(highlight_players_in_motion == T, "black", "NA"))      
   }
   
   if(show_Matchup) {
@@ -278,7 +278,7 @@ visualize_single_frame <- function(game_df,
       geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                                                    !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
                        aes(x = x, y = y,  
-                           label=paste("->", matchup_jerseyNumber)),
+                           label=paste("->", matchup_jerseyNumber1, ifelse(!is.na(pff_secondaryDefensiveCoverageMatchupNflId), matchup_jerseyNumber2, NA))),
                        box.padding = 1,
                        point.padding = 1,
                        size = 4,
