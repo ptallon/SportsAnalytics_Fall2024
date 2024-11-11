@@ -298,7 +298,7 @@ visualize_single_frame <- function(game_df,
                aes(x = x, y = y, 
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
     
-    annotate("text", x = max(-5,min(game_df$x)-5), y = 54, label = frame_details) +
+    annotate("text", x = min(game_df$x)-2, y = 55, label = frame_details, colour = "white") +
     
     # add some labels to report the play description
     labs(title = str_wrap(game_df$playDescription), 30) +
