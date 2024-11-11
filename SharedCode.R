@@ -321,18 +321,18 @@ visualize_single_frame <- function(game_df,
 motion_stats <- function(df, player_play) { 
 
   # check to see if a column called team exists in df
-  !if("team" %in% colnames(df)){
+  if(!"team" %in% colnames(df)){
     df  <- df %>%
       mutate( team = ifelse( club == homeTeamAbbr, "home", ifelse( club == "football", "football", "away"))) %>%
       data.frame()
   }
 
   # check if week and jerseyNumber are in player_play
-  !if("jerseyNumber" %in% colnames(player_play)){
+  if(!"jerseyNumber" %in% colnames(player_play)){
     player_play <- player_play %>%
       left_join(df %>% select(nflId, jerseyNumber) %>% distinct(), by = c("nflId"))
   }
-  !if("week" %in% colnames(player_play)){
+  if(!"week" %in% colnames(player_play)){
     player_play <- player_play %>%
       left_join(df %>% select(nflId, week) %>% distinct(), by = c("nflId"))
   }
