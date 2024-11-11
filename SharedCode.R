@@ -228,7 +228,7 @@ visualize_single_frame <- function(game_df,
     stop('The frame number you are looking to view is not in the data frame. Please check the frame number.')
   }
   
-  load_packages(c("dplyr", "stringr", "ggrepel"))
+  load_packages(c("dplyr", "ggrepel"))
   
   game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
@@ -302,7 +302,7 @@ visualize_single_frame <- function(game_df,
              colour = "white", hjust=0) +
     
     # add some labels to report the play description
-    labs(title = str_wrap(game_df$playDescription), 30) +
+    labs(title = game_df$playDescription) +
     
     # set the theme to dark green to color the areas beyond the end zones
     theme(panel.background = element_rect(fill = "forestgreen", 
@@ -311,4 +311,110 @@ visualize_single_frame <- function(game_df,
 
   g  
 }
+
+
+# ------------------------------------------------------------------------------------
+# -------------------------- Motion Stats in a Given Week ----------------------------
+# ------------------------------------------------------------------------------------
+# pass in a merged df and return all motion stats for that week.
+
+motion_stats <- function(df, player_play) { 
+
+  # check to see if a column called team exists in df
+  !if("team" %in% colnames(df)){
+    df  <- df %>%
+      mutate( team = ifelse( club == homeTeamAbbr, "home", ifelse( club == "football", "football", "away"))) %>%
+      data.frame()
+  }
+
+  # check if week and jerseyNumber are in player_play
+  !if("jerseyNumber" %in% colnames(player_play)){
+    player_play <- player_play %>%
+      left_join(df %>% select(nflId, jerseyNumber) %>% distinct(), by = c("nflId"))
+  }
+  !if("week" %in% colnames(player_play)){
+    player_play <- player_play %>%
+      left_join(df %>% select(nflId, week) %>% distinct(), by = c("nflId"))
+  }
+  
+  df1 <- player_play[player_play$inMotionAtBallSnap == TRUE,]
+  
+  plays_with_multiple_players_in_motion <- df1 %>%
+    select(gameId, playId, nflId, jerseyNumber, week) %>%
+    group_by(gameId, playId, week) %>%
+    summarise(n = n(), .groups = 'keep') %>%
+    arrange(-n) %>%
+    filter(week == 1, n > 1) %>%
+    data.frame()
+  
+  for(each_pair in list(distinct(plays_with_multiple_players_in_motion[c("gameId", "playId")]))) {
+    game_Id <- each_pair[,1]
+    play_Id <- each_pair[,2]
+    
+    print(paste(game_Id, play_Id))
+  }  
+  
+  motion_df <- data.frame(displayName   = as.character(),
+                          sum_abs_dy    = as.numeric(),
+                          max_sum_dy_d1 = as.numeric(),
+                          max_sum_dy_d2 = as.numeric(),
+                          interval = as.Date(character()),
+                          speed_yrds_second = as.numeric(),
+                          gameId = as.integer(),
+                          playId = as.integer()  ) 
+  
+  for(row in 1:nrow(plays_with_multiple_players_in_motion)) {
+    game_Id <- plays_with_multiple_players_in_motion[row, "gameId"]
+    play_Id <- plays_with_multiple_players_in_motion[row, "playId"]
+    
+    game_df <- df %>%
+      
+      # isolate the player in motion during this play
+      filter(gameId == game_Id, playId == play_Id, 
+             frameType == "BEFORE_SNAP", inMotionAtBallSnap == TRUE) %>%
+      
+      # reduce the number of columns to something more manageable
+      select(displayName, jerseyNumber, x, y, dis, frameId, frameType, time, gameId, playId, week) %>%
+      
+      # to do cumulative sum, you must sort first
+      arrange(gameId, playId, displayName, frameId) %>%
+      
+      # group by
+      group_by(gameId, playId, displayName) %>%
+      
+      # set the direction of the motion
+      mutate( motion_direction = ifelse( y - lag(y) < 0, 1, 
+                                         ifelse( y - lag(y) > 0, 2, NA)),
+              dy = ifelse(y == lag(y), NA,  (y - lag(y)))) %>%
+      
+      # calculate cumulative totals over the course of the play
+      group_by(gameId, playId, displayName, motion_direction) %>%
+      mutate(sum_dy     = cumsum(dy),
+             sum_dy_d1  = ifelse(dy < 0, cumsum(dy), NA   ),
+             sum_dy_d2  = ifelse(dy > 0, cumsum(dy), NA   )) %>%
+      
+      group_by(gameId, playId, displayName) %>%
+      mutate(sum_abs_dy = sum(abs(dy), na.rm = T)) %>%
+      mutate(max_sum_dy_d1 = min(sum_dy_d1, na.rm = T)) %>%
+      mutate(max_sum_dy_d2 = max(sum_dy_d2, na.rm = T)) %>%
+      mutate(max_time = max(time)) %>%
+      mutate(min_time = min(time)) %>%
+      mutate(interval = difftime(max_time, min_time,units = "secs")) %>%
+      mutate(speed_yrds_second = sum_abs_dy / as.double(interval)) %>%
+      
+      # report out key metrics on last row
+      slice(n()) %>%
+      
+      select(displayName, sum_abs_dy, max_sum_dy_d1, max_sum_dy_d2, interval, speed_yrds_second, gameId, playId, week) %>% 
+      
+      # convert it to a data.frame  
+      data.frame()  
+    
+    motion_df <- rbind(motion_df, game_df)
+    
+  }
+  return(motion_df)
+}
+  
+  
 
