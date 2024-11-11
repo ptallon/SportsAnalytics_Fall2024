@@ -292,7 +292,7 @@ visualize_single_frame <- function(game_df,
   
   frame_details <- paste("game:", unique(game_df$gameId), "play:",unique(game_df$playId), "frame:",unique(game_df$frameId)) 
 
-  g <- g +
+  g <- g + 
     # insert jersey number for each player
     geom_text( data = game_df %>% filter(team != "football"),
                aes(x = x, y = y, 
