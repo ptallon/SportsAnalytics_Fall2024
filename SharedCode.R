@@ -318,7 +318,7 @@ visualize_single_frame <- function(game_df,
 # ------------------------------------------------------------------------------------
 # pass in a merged df and return all motion stats for that week.
 
-motion_stats <- function(df, player_play) {  
+motion_stats_single_week <- function(df, player_play) {  
 
   # check to see if a column called team exists in df
   if(!"team" %in% colnames(df)){
