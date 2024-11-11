@@ -290,7 +290,7 @@ visualize_single_frame <- function(game_df,
                        segment.color = 'darkblue')  
   }
   
-  frame_details <- paste("game:", unique(game_df$gameId), "play:",unique(game_df$playId), "frame:",unique(game_df$frameId)) 
+  frame_details <- paste("game:", unique(game_df$gameId), "  play:",unique(game_df$playId), "  frame:",unique(game_df$frameId)) 
 
   g <- g + 
     # insert jersey number for each player
