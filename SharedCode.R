@@ -290,11 +290,15 @@ visualize_single_frame <- function(game_df,
                        segment.color = 'darkblue')  
   }
   
+  frame_details <- paste("game:", unique(game_df$gameId), "play:",unique(game_df$playId), "frame:",unique(game_df$frameId)) 
+
   g <- g +
     # insert jersey number for each player
     geom_text( data = game_df %>% filter(team != "football"),
                aes(x = x, y = y, 
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
+    
+    annotate("text", x = max(-5,min(game_df$x)-5), y = 54, label = frame_details) +
     
     # add some labels to report the play description
     labs(title = str_wrap(game_df$playDescription), 30) +
