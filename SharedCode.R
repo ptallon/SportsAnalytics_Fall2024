@@ -278,7 +278,7 @@ visualize_single_frame <- function(game_df,
       geom_label_repel(data = game_df %>% filter(!is.na(pff_primaryDefensiveCoverageMatchupNflId) |
                                                    !is.na(pff_secondaryDefensiveCoverageMatchupNflId)), 
                        aes(x = x, y = y,  
-                           label=paste("\u2192", matchup_jerseyNumber1, 
+                           label=paste(position, "\u2192", matchup_jerseyNumber1, 
                                        ifelse(!is.na(pff_secondaryDefensiveCoverageMatchupNflId), 
                                               matchup_jerseyNumber2, 
                                               ""))), 
@@ -287,7 +287,7 @@ visualize_single_frame <- function(game_df,
                        size = 4,
                        color = "black",
                        direction = "both",
-                       segment.color = 'darkblue')  
+                       segment.color = 'white')  
   }
   
   frame_details <- paste("game:", unique(game_df$gameId), "  play:",unique(game_df$playId), "  frame:",unique(game_df$frameId)) 
