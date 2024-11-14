@@ -17,7 +17,7 @@ load_packages <- function(packages = c()) {
       suppressMessages(suppressWarnings(library(i, character.only=T)))
     }
   }
-}
+}     
 
 
 # -----------------------------------------------------------------------------------------------
@@ -415,6 +415,4 @@ motion_stats_single_week <- function(df, player_play) {
   }
   return(motion_df)
 }
-  
-  
 
