@@ -81,9 +81,12 @@ load_data_for_one_week <- function(directory,
     
   }
   
+  # based on the direction of the play, map the xy coordinates to be consistently in one direction
   df <- df %>%
     mutate( x = ifelse(playDirection == "right", 120-x, x),
-            y = ifelse(playDirection == "right", 160/3-y, y ),
+            y = ifelse(playDirection == "right", 160/3-y, y),
+            targetX = ifelse(playDirection == "right", 120-x, x),
+            targetY = ifelse(playDirection == "right", 160/3-y, y),
             team = factor(club, 
                           levels = c("football",   "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", 
                                      "CIN", "CLE", "DAL", "DEN", "DET", "GB",  "HOU", "IND", 
