@@ -184,7 +184,7 @@ visualize_single_play <- function(game_df,
   
   if(show_targetXY) {
     g<- g + 
-      annotate("text", x = targetX, y = targetY, label = "X", color = "white")
+      annotate("text", x = game_df$targetX, y = game_df$targetY, label = "X", colour = "hotpink")
   }
   
   g <- g +
