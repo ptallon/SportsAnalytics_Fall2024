@@ -145,7 +145,8 @@ load_data_for_all_weeks <- function(directory,
 # pass in a dataframe where you have filtered the gameId and playId.
 
 visualize_single_play <- function(game_df,
-                                  highlight_players_in_motion = FALSE) {
+                                  highlight_players_in_motion = FALSE,
+                                  show_targetXY = FALSE) {
   
   if(!length(unique(game_df$gameId)) == 1) {
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
@@ -179,6 +180,11 @@ visualize_single_play <- function(game_df,
                  colour = ifelse(highlight_players_in_motion == T, "black", "NA"), 
                  size = 6, 
                  fill = ifelse(highlight_players_in_motion == T, "black", "NA"))    
+  }
+  
+  if(show_targetXY) {
+    g<- g + 
+      annotate("text", x = targetX, y = targetY, label = "X", color = "white")
   }
   
   g <- g +
