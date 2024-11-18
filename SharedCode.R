@@ -395,10 +395,10 @@ motion_stats_single_week <- function(df, player_play) {
       
       group_by(gameId, playId, displayName) %>%
       mutate(sum_abs_dy = sum(abs(dy), na.rm = T)) %>%
-      mutate(max_sum_dy_d1 = min(sum_dy_d1, na.rm = T)) %>%
-      mutate(max_sum_dy_d2 = max(sum_dy_d2, na.rm = T)) %>%
-      mutate(max_time = max(time)) %>%
-      mutate(min_time = min(time)) %>%
+      mutate(max_sum_dy_d1 = min(0, sum_dy_d1, na.rm = T)) %>%
+      mutate(max_sum_dy_d2 = max(0, sum_dy_d2, na.rm = T)) %>%
+      mutate(max_time = max(0, time)) %>%
+      mutate(min_time = min(Inf, time)) %>%
       mutate(interval = difftime(max_time, min_time,units = "secs")) %>%
       mutate(speed_yrds_second = sum_abs_dy / as.double(interval)) %>%
       
