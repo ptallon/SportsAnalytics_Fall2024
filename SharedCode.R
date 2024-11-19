@@ -187,7 +187,8 @@ visualize_single_play <- function(game_df,
     if( sum(!is.na(game_df$targetX)) != 0 & sum(!is.na(game_df$targetY)) != 0 ) {
       g <- g + 
         annotate("text", x = game_df$targetX, y = game_df$targetY, label = "X", colour = "black") +
-        geom_point(aes(x = game_df$targetX, y = game_df$targetY), shape=22, colour="black", fill="hotpink", alpha = 0.5)
+        geom_point(aes(x = game_df$targetX, y = game_df$targetY), 
+                   shape=22, size = 6, colour="black", fill="hotpink", alpha = 0.5)
     }
   }
   
