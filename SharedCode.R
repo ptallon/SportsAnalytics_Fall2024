@@ -184,7 +184,7 @@ visualize_single_play <- function(game_df,
   
   # show the target X and Y if both are not NA and the user wants to view this
   if(show_targetXY) {
-    if( !is.na(game_df$targetX) & !is.na(game_df$targetY) ) {
+    if( sum(!is.na(game_df$targetX)) != 0 & sum(!is.na(game_df$targetY)) != 0 ) {
       g <- g + 
         annotate("text", x = game_df$targetX, y = game_df$targetY, label = "X", colour = "hotpink")
     }
