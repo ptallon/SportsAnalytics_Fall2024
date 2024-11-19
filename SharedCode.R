@@ -189,7 +189,7 @@ visualize_single_play <- function(game_df,
         geom_point(aes(x = game_df$targetX, y = game_df$targetY), 
                    shape=21, size = 6, colour="black", fill="white", alpha = 0.5) +
         annotate("text", x = game_df$targetX, y = game_df$targetY, 
-                 label = "X", colour = "black", hjust = 0.5, vjust = 0.5)
+                 label = "X", colour = "black", hjust = 0.5, vjust = 0.4)
     }
   }
   
