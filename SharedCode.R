@@ -78,22 +78,19 @@ load_data_for_one_week <- function(directory,
     df <- left_join(df, plays,       by = c("gameId", "playId"))
     df <- left_join(df, players,     by = c("nflId", "displayName"))
     df <- left_join(df, player_play, by = c("gameId", "playId", "nflId"))
-    
   }
   
-  # based on the direction of the play, map the xy coordinates to be consistently in one direction
+  # based on the direction of the play, map the x and y coordinates to be consistently in one direction
   df <- df %>%
     mutate( x = ifelse(playDirection == "right", 120-x, x),
             y = ifelse(playDirection == "right", 160/3-y, y),
-            targetX = ifelse(playDirection == "right", 120-targetX, targetX),
-            targetY = ifelse(playDirection == "right", 160/3-targetY, targetY),
-            team = factor(club, 
-                          levels = c("football",   "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", 
-                                     "CIN", "CLE", "DAL", "DEN", "DET", "GB",  "HOU", "IND", 
-                                     "JAX", "KC",  "LA",  "LAC", "LV",  "MIA", "MIN", "NE",  
-                                     "NO",  "NYG", "NYJ", "PHI", "PIT", "SEA", "SF",  "TB",  
-                                     "TEN", "WAS"))
+            targetX = ifelse(playDirection == "right", 120-targetX, targetX)
     ) %>%
+    data.frame()
+  
+  df  <- df %>%
+    mutate( team = ifelse( club == homeTeamAbbr, "home", ifelse( club == "football", "football", "away"))) %>%
+    mutate( team = factor(team, levels = c("away", "football", "home"))) %>%
     data.frame()
   
   return(df)
@@ -431,3 +428,29 @@ motion_stats_single_week <- function(df, player_play) {
   return(motion_df)
 }
 
+# ------------------------------------------------------------------------------------
+# ------------------------- Remove Frames prior to Lineset ---------------------------
+# ------------------------------------------------------------------------------------
+# pass in a merged df and return a revised df without the frame prior to lineset.
+# renumberFrames will renumber the frame IDs so that the frameId starts at 1
+
+remove_frames_before_lineset <- function(df, renumberFrames = TRUE) {  
+  
+  # keep rows after line_set is found, NOT EVERY gameId/playId has a line_set
+  lineset_df <- df %>%
+    arrange(gameId, playId, frameId) %>%
+    group_by(playId, gameId) %>%
+    mutate(m1 = which(event=='line_set', arr.ind=TRUE)[1] ) %>%
+    filter( row_number(gameId) >= unique(m1) )%>%
+    ungroup() %>%
+    data.frame()
+  
+  if(renumberFrames) {
+    lineset_df <- lineset_df %>%
+      group_by(gameId, playId) %>%
+      mutate(frameId = frameId - min(frameId) + 1) %>%
+      ungroup() %>%
+      data.frame()
+  }
+  return(lineset_df)
+}
