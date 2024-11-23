@@ -168,6 +168,15 @@ visualize_single_play <- function(game_df,
     gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) 
     
   if(show_Voronoi) {
+    
+    if(! "ggboronoi" %in% installed.packages()){
+      suppressMessages(suppressWarnings(
+        remotes::install_github("garretrc/ggvoronoi", dependencies = TRUE, build_opts = c("--no-resave-data"))
+      ))
+    }
+    
+    suppressMessages(suppressWarnings(library(ggvoronoi)))
+    
     box <- data.frame(
       x = c( max(-5,min(game_df$x)-5), 
              min(max(game_df$x)+5, 125), 
@@ -249,6 +258,7 @@ visualize_single_frame <- function(game_df,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
+                                   show_Voronoi = FALSE,
                                    frame_number = 1) { 
   
   if(!length(unique(game_df$gameId)) == 1) {
@@ -277,6 +287,32 @@ visualize_single_frame <- function(game_df,
                         guide="none") + 
     
     gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) 
+  
+  if(show_Voronoi) {
+    
+    if(! "ggboronoi" %in% installed.packages()){
+      suppressMessages(suppressWarnings(
+        remotes::install_github("garretrc/ggvoronoi", dependencies = TRUE, build_opts = c("--no-resave-data"))
+      ))
+    }
+    
+    suppressMessages(suppressWarnings(library(ggvoronoi)))
+    
+    box <- data.frame(
+      x = c( max(-5,min(game_df$x)-5), 
+             min(max(game_df$x)+5, 125), 
+             min(max(game_df$x)+5, 125), 
+             max(-5,min(game_df$x)-5)  ),
+      y = c( 0,
+             0,
+             53.33, 
+             53.33)
+    )
+    
+    g <- g +
+      geom_voronoi(alpha = 0.25, fill="white", outline = box) + 
+      stat_voronoi(geom = "path", outline = box) 
+  }
   
     # highlight with a pink halo those defensive players who are matched up with an offensive player
     if(highlight_matchup) {
