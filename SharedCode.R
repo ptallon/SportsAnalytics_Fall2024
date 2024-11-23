@@ -310,8 +310,8 @@ visualize_single_frame <- function(game_df,
     )
     
     g <- g +
-      geom_voronoi(alpha = 0.25, fill="white", outline = box) + 
-      stat_voronoi(geom = "path", outline = box) 
+      geom_voronoi(data = game_df, aes(x = x, y = y), alpha = 0.25, fill="white", outline = box) + 
+      stat_voronoi(data = game_df, aes(x = x, y = y), geom = "path", outline = box) 
   }
   
     # highlight with a pink halo those defensive players who are matched up with an offensive player
