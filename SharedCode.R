@@ -169,7 +169,7 @@ visualize_single_play <- function(game_df,
     
   if(show_Voronoi) {
     
-    if(! "ggboronoi" %in% installed.packages()){
+    if(! "ggvoronoi" %in% installed.packages()){
       suppressMessages(suppressWarnings(
         remotes::install_github("garretrc/ggvoronoi", dependencies = TRUE, build_opts = c("--no-resave-data"))
       ))
@@ -189,8 +189,8 @@ visualize_single_play <- function(game_df,
       )
     
     g <- g +
-      geom_voronoi(data = game_df, aes(x = x, y = y), alpha = 0.25, fill="white", outline = box) + 
-      stat_voronoi(data = game_df, aes(x = x, y = y), geom = "path", outline = box) 
+      geom_voronoi(data = game_df %>% filter(frameId == 1), alpha = 0.25, fill="white", outline = box) + 
+      stat_voronoi(data = game_df %>% filter(frameId == 1), geom = "path", outline = box) 
   }
   
   g <- g +
@@ -290,7 +290,7 @@ visualize_single_frame <- function(game_df,
   
   if(show_Voronoi) {
     
-    if(! "ggboronoi" %in% installed.packages()){
+    if(! "ggvoronoi" %in% installed.packages()){
       suppressMessages(suppressWarnings(
         remotes::install_github("garretrc/ggvoronoi", dependencies = TRUE, build_opts = c("--no-resave-data"))
       ))
