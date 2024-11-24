@@ -143,8 +143,7 @@ load_data_for_all_weeks <- function(directory,
 
 visualize_single_play <- function(game_df,
                                   highlight_players_in_motion = FALSE,
-                                  show_targetXY = FALSE,
-                                  show_Voronoi = FALSE) {
+                                  show_targetXY = FALSE) {
   
   if(!length(unique(game_df$gameId)) == 1) {
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
@@ -165,35 +164,8 @@ visualize_single_play <- function(game_df,
                         na.value = NA,
                         guide="none") + 
     
-    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) 
+    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) +
     
-  if(show_Voronoi) {
-    
-    if(! "ggvoronoi" %in% installed.packages()){
-      suppressMessages(suppressWarnings(
-        remotes::install_github("garretrc/ggvoronoi", dependencies = TRUE, build_opts = c("--no-resave-data"))
-      ))
-    }
-    
-    suppressMessages(suppressWarnings(library(ggvoronoi)))
-    
-    box <- data.frame(
-      x = c( max(-5,min(game_df$x)-5), 
-             min(max(game_df$x)+5, 125), 
-             min(max(game_df$x)+5, 125), 
-             max(-5,min(game_df$x)-5)  ),
-      y = c( 0,
-             0,
-             53.33, 
-             53.33)
-      )
-    
-    g <- g +
-      geom_voronoi(data = game_df %>% filter(frameId == 1), alpha = 0.25, fill="white", outline = box) + 
-      stat_voronoi(data = game_df %>% filter(frameId == 1), geom = "path", outline = box) 
-  }
-  
-  g <- g +
     # add points to plot for all players and the football
     geom_point(aes(shape = team, colour = team, size = team, fill = team))
   
