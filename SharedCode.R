@@ -189,8 +189,8 @@ visualize_single_play <- function(game_df,
       )
     
     g <- g +
-        geom_voronoi(alpha = 0.25, fill="white", outline = box) + 
-        stat_voronoi(geom = "path", outline = box) 
+      geom_voronoi(data = game_df, aes(x = x, y = y), alpha = 0.25, fill="white", outline = box) + 
+      stat_voronoi(data = game_df, aes(x = x, y = y), geom = "path", outline = box) 
   }
   
   g <- g +
