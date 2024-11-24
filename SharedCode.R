@@ -150,7 +150,7 @@ visualize_single_play <- function(game_df,
     stop('There is more than one gameId in your data. Please pass in a dataframe for the exact gameId and playId you want to visualize.')
   }  
   
-  load_packages(c("hms", "stringr"))
+  load_packages(c("hms", "stringr", "gganimate", "gifski"))
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
