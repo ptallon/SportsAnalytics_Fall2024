@@ -51,7 +51,8 @@ check_playId_gameId <- function(data,
 # x and y coordinates are also revised in order to have consistent play directions
 load_data_for_one_week <- function(directory,
                                    weekNumber = 1,
-                                   merge      = F) {
+                                   merge      = F,
+                                   columns    = c()) {
   
   if (missing(directory) | missing(weekNumber) | !weekNumber %in% seq(9) ) {
     if (missing(directory)) {
@@ -93,6 +94,15 @@ load_data_for_one_week <- function(directory,
     mutate( team = factor(team, levels = c("away", "football", "home"))) %>%
     data.frame()
   
+  if(length(columns) > 0) {
+    for(col in columns) {
+      if(!col %in% colnames(df)) {
+        print(paste("Check the columns you want as",col,"is not in the data frame. Returning all columns instead."))
+      }
+    }
+    df <- df %>%
+      select(columns) %>% data.frame()
+  }
   return(df)
 }
 
@@ -103,9 +113,10 @@ load_data_for_one_week <- function(directory,
 # data frame
 load_data_for_specified_weeks <- function(directory, 
                                           these_weeks = c(1, 2, 3, 4, 5, 6, 7, 8, 9),
-                                          merge = F) {
+                                          merge = F,
+                                          columns = c()) {
   for (week in these_weeks) {
-    df <- load_data_for_one_week(directory, week, merge)
+    df <- load_data_for_one_week(directory, week, merge, columns)
     if (week == these_weeks[1]) {
       big_df <- data.frame(df)
     }
@@ -123,9 +134,10 @@ load_data_for_specified_weeks <- function(directory,
 # read in data files for all weeks and row bind them together to form a single
 # data frame
 load_data_for_all_weeks <- function(directory, 
-                                    merge = F) {
+                                    merge = F,
+                                    columns = c()) {
   for (week in seq(1,9)) {
-    df <- load_data_for_one_week(directory, week, merge)
+    df <- load_data_for_one_week(directory, week, merge, columns)
     if (week == 1) {
       big_df <- data.frame(df)
     }
