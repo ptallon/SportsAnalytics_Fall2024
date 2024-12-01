@@ -97,7 +97,7 @@ load_data_for_one_week <- function(directory,
   if(length(columns) > 0) {
     for(col in columns) {
       if(!col %in% colnames(df)) {
-        stop(paste("Check the columns you want as",col,"is not in the data frame. Returning all columns instead."))
+        stop(paste("Check the columns you want as",col,"is not in the data frame. No data frame returned."))
       }
     }
     df <- df %>%
@@ -105,6 +105,7 @@ load_data_for_one_week <- function(directory,
   }
   return(df)
 }
+
 
 # ---------------------------------------------------------------------------------
 # -------------------- Load & Merge Data for Specified Weeks ----------------------
