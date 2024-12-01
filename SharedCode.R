@@ -85,7 +85,8 @@ load_data_for_one_week <- function(directory,
   df <- df %>%
     mutate( x = ifelse(playDirection == "right", 120-x, x),
             y = ifelse(playDirection == "right", 160/3-y, y),
-            targetX = ifelse(playDirection == "right", 120-targetX, targetX)
+            targetX = ifelse(playDirection == "right", 120-targetX, targetX),
+            absoluteYardlineNumber = ifelse(playDirection == "right", 100 - absoluteYardlineNumber, absoluteYardlineNumber)
     ) %>%
     data.frame()
   
@@ -203,11 +204,21 @@ visualize_single_play <- function(game_df,
     }
   }
   
+  yardLine <- unique(game_df$absoluteYardlineNumber)
+  
   g <- g +
     # insert jersey number for each player
     geom_text( data = game_df %>% filter(team != "football"),
                aes(x = x, y = y, 
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
+    
+    # show the absolute line
+    geom_segment(aes(x = yardLine, 
+                     y = 0, 
+                     xend = yardLine, 
+                     yend = 53.33), 
+                 color="yellow", 
+                 size = 1) +
     
     # add some labels to report the play description
     labs(title = game_df$playDescription) +
@@ -257,6 +268,8 @@ visualize_single_frame <- function(game_df,
   
   game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
+  yardLine <- unique(game_df$absoluteYardlineNumber)
+  
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
   g <- ggplot(data = game_df, aes(x = x, y = y), color=team, fill=team) +
@@ -270,7 +283,15 @@ visualize_single_frame <- function(game_df,
                         na.value = NA,
                         guide="none") + 
     
-    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) 
+    gg_field(yardmin = max(-5,min(game_df$x)-5), yardmax = min(max(game_df$x)+5, 125) ) +
+    
+    # show the absolute line
+    geom_segment(aes(x = yardLine, 
+                     y = 0, 
+                     xend = yardLine, 
+                     yend = 53.33), 
+                 color="yellow", 
+                 size = 1) +
   
   if(show_Voronoi) {
     
