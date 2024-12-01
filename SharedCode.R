@@ -97,7 +97,7 @@ load_data_for_one_week <- function(directory,
   if(length(columns) > 0) {
     for(col in columns) {
       if(!col %in% colnames(df)) {
-        print(paste("Check the columns you want as",col,"is not in the data frame. Returning all columns instead."))
+        stop(paste("Check the columns you want as",col,"is not in the data frame. Returning all columns instead."))
       }
     }
     df <- df %>%
@@ -230,7 +230,6 @@ visualize_single_play <- function(game_df,
           renderer = gifski_renderer() 
   ) 
 }
-
 
 
 # ------------------------------------------------------------------------------------
