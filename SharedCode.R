@@ -101,7 +101,7 @@ load_data_for_one_week <- function(directory,
       }
     }
     df <- df %>%
-      select(columns) %>% data.frame()
+      select(unique(columns)) %>% data.frame()
   }
   return(df)
 }
