@@ -270,10 +270,18 @@ visualize_single_frame <- function(game_df,
   
   load_packages(c("dplyr", "ggrepel"))
   
-  game_df <- game_df %>% 
+  game_df <- game_df %>%
     filter(frameId == frameId) %>%  
+    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
+              by = c("pff_primaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
+    rename("matchup_jerseyNumber1" = "jerseyNumber.y",
+           "jerseyNumber" = "jerseyNumber.x") %>%
+    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
+              by = c("pff_secondaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
+    rename("matchup_jerseyNumber2" = "jerseyNumber.y",
+           "jerseyNumber" = "jerseyNumber.x") %>%
     data.frame()
-  
+
   yardLine <- unique(game_df$absoluteYardlineNumber) + 20
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
