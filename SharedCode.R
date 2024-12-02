@@ -253,11 +253,13 @@ visualize_single_play <- function(game_df,
 
 
 # ------------------------------------------------------------------------------------
-# ---------------------- Visualize a Single Frame in a Game --- ----------------------
+# ---------------------- Visualize a Single Frame in a Game --------------------------
 # ------------------------------------------------------------------------------------
-# pass in a dataframe where you have filtered the gameId and playId.
+# pass in a dataframe where you have filtered the gameId and playId. Tell it what frame you want to see.
+# also pass in the player_play data frame since it needs this to complete the match up.
 
 visualize_single_frame <- function(game_df,
+                                   player_play,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
