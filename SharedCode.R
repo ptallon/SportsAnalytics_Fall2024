@@ -263,16 +263,16 @@ visualize_single_frame <- function(game_df,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
                                    show_Voronoi = FALSE,
-                                   frameId = 1) {  
+                                   frame_number = 1) {  
   
-  if(!frameId %in% unique(game_df$frameId)) {
+  if(!frame_number %in% unique(game_df$frameId)) {
     stop('The frameId you are using is not found in the data frame. Please check your frameId and try again.')
   }
   
   load_packages(c("dplyr", "ggrepel"))
   
   game_df <- game_df %>%
-    filter(frameId == frameId) %>%  
+    filter(frameId == frame_number) %>%  
 #    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
 #              by = c("pff_primaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
 #    rename("matchup_jerseyNumber1" = "jerseyNumber.y",
