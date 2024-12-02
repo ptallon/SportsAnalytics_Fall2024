@@ -157,7 +157,7 @@ load_data_for_all_weeks <- function(directory,
 # pass in a dataframe; return a data frame of red zone plays.
 red_zone_plays <- function(game_df) {
   redzone_df <- game_df %>%
-    filter(absoluteYardlineNumber<=10) %>%
+    filter(absoluteYardlineNumber <= 20) %>%
     data.frame()
   return(redzone_df)
 }
