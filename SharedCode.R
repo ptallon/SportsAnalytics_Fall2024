@@ -291,7 +291,7 @@ visualize_single_frame <- function(game_df,
                      xend = yardLine, 
                      yend = 53.33), 
                  color="yellow", 
-                 linewidth = 1) +
+                 linewidth = 1) 
   
   if(show_Voronoi) {
     
