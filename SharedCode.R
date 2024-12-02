@@ -218,7 +218,7 @@ visualize_single_play <- function(game_df,
                      xend = yardLine, 
                      yend = 53.33), 
                  color="yellow", 
-                 size = 1) +
+                 linewidth = 1) +
     
     # add some labels to report the play description
     labs(title = game_df$playDescription) +
@@ -291,7 +291,7 @@ visualize_single_frame <- function(game_df,
                      xend = yardLine, 
                      yend = 53.33), 
                  color="yellow", 
-                 size = 1) +
+                 linewidth = 1) +
   
   if(show_Voronoi) {
     
