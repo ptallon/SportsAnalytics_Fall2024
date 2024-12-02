@@ -281,7 +281,7 @@ visualize_single_frame <- function(game_df,
 #              by = c("pff_secondaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
 #    rename("matchup_jerseyNumber2" = "jerseyNumber.y",
 #           "jerseyNumber" = "jerseyNumber.x") %>%
-    data.frame()
+    data.frame() 
 
   yardLine <- unique(game_df$absoluteYardlineNumber) + 20
   
