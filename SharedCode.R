@@ -264,7 +264,7 @@ visualize_single_frame <- function(game_df,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
                                    show_Voronoi = FALSE,
-                                   frameId = 1) { 
+                                   frameId = 1) {  
   
   if(!frameId %in% unique(game_df$frameId)) {
     stop('The frameId you are using is not found in the data frame. Please check your frameId and try again.')
