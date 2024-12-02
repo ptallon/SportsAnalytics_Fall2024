@@ -258,43 +258,20 @@ visualize_single_play <- function(game_df,
 # pass in a dataframe where you have filtered the gameId and playId.
 
 visualize_single_frame <- function(game_df,
-                                   player_play,
-                                   gameId,
-                                   playId,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
                                    show_Voronoi = FALSE,
                                    frameId = 1) { 
   
-  if(!gameId %in% game_df$gameId) {
-    stop('The gameId you are using is not in the data frame. Please check the gameId and try again.')
-  }
-  
-  if(!playId %in% game_df$playId) {
-    stop('The playId you are using is not in the data frame. Please check the playId and try again.')
-  }
-  
-  if(!playId %in% unique(game_df[game_df$gameId == gameId, "playId"])) {
-    stop('The playId you are using is associated with that gameId the data frame. Please check your playId and try again.')
-  }
-
-  if(!frameId %in% game_df[game_df$gameId == gameId & game_df$playId == playId, "frameId"]) {
-    stop('The frameId you are using is not associated with that gameId and playId. Please check your frameId and try again.')
+  if(!frameId %in% unique(game_df$frameId)) {
+    stop('The frameId you are using is not found in the data frame. Please check your frameId and try again.')
   }
   
   load_packages(c("dplyr", "ggrepel"))
   
   game_df <- game_df %>% 
-    filter(gameId == gameId, playId == playId, frameId == frameId) %>%  
-    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
-              by = c("pff_primaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
-    rename("matchup_jerseyNumber1" = "jerseyNumber.y",
-           "jerseyNumber" = "jerseyNumber.x") %>%
-    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
-              by = c("pff_secondaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
-    rename("matchup_jerseyNumber2" = "jerseyNumber.y",
-           "jerseyNumber" = "jerseyNumber.x") %>%
+    filter(frameId == frameId) %>%  
     data.frame()
   
   yardLine <- unique(game_df$absoluteYardlineNumber) + 20
