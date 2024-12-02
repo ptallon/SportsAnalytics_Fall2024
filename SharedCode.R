@@ -86,7 +86,7 @@ load_data_for_one_week <- function(directory,
     mutate( x = ifelse(playDirection == "right", 120-x, x),
             y = ifelse(playDirection == "right", 160/3-y, y),
             targetX = ifelse(playDirection == "right", 120-targetX, targetX),
-            absoluteYardlineNumber = ifelse(playDirection == "right", 100 - absoluteYardlineNumber, absoluteYardlineNumber)
+            absoluteYardlineNumber = ifelse(playDirection == "right", 120 - absoluteYardlineNumber, absoluteYardlineNumber)
     ) %>%
     data.frame()
   
