@@ -213,13 +213,8 @@ visualize_single_play <- function(game_df,
                    label = jerseyNumber), colour = "white", size = 3.5, vjust = 0.36 ) +
     
     # show the absolute line
-    geom_segment(aes(x = yardLine, 
-                     y = 0, 
-                     xend = yardLine, 
-                     yend = 53.33), 
-                 color="yellow", 
-                 linewidth = 1) +
-    
+    annotate("segment", x = yardLine, xend = yardLine, y = 0, yend = 53.33, colour = "yellow", linewidth = 1) +
+
     # add some labels to report the play description
     labs(title = game_df$playDescription) +
     
