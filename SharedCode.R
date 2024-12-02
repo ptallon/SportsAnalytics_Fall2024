@@ -259,7 +259,6 @@ visualize_single_play <- function(game_df,
 # also pass in the player_play data frame since it needs this to complete the match up.
 
 visualize_single_frame <- function(game_df,
-                                   player_play,
                                    highlight_players_in_motion = FALSE,
                                    highlight_matchup = FALSE,
                                    show_Matchup = FALSE,
@@ -274,14 +273,14 @@ visualize_single_frame <- function(game_df,
   
   game_df <- game_df %>%
     filter(frameId == frameId) %>%  
-    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
-              by = c("pff_primaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
-    rename("matchup_jerseyNumber1" = "jerseyNumber.y",
-           "jerseyNumber" = "jerseyNumber.x") %>%
-    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
-              by = c("pff_secondaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
-    rename("matchup_jerseyNumber2" = "jerseyNumber.y",
-           "jerseyNumber" = "jerseyNumber.x") %>%
+#    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
+#              by = c("pff_primaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
+#    rename("matchup_jerseyNumber1" = "jerseyNumber.y",
+#           "jerseyNumber" = "jerseyNumber.x") %>%
+#    left_join(player_play %>% select(nflId, jerseyNumber) %>% distinct(), 
+#              by = c("pff_secondaryDefensiveCoverageMatchupNflId" = "nflId" )  ) %>%
+#    rename("matchup_jerseyNumber2" = "jerseyNumber.y",
+#           "jerseyNumber" = "jerseyNumber.x") %>%
     data.frame()
 
   yardLine <- unique(game_df$absoluteYardlineNumber) + 20
