@@ -86,7 +86,7 @@ load_data_for_one_week <- function(directory,
     mutate( x = ifelse(playDirection == "right", 120-x, x),
             y = ifelse(playDirection == "right", 160/3-y, y),
             targetX = ifelse(playDirection == "right", 120-targetX, targetX),
-            absoluteYardlineNumber = ifelse(playDirection == "right", 120 - absoluteYardlineNumber, absoluteYardlineNumber)
+            absoluteYardlineNumber = ifelse(playDirection == "right", 100 - absoluteYardlineNumber, absoluteYardlineNumber)
     ) %>%
     data.frame()
   
@@ -150,8 +150,21 @@ load_data_for_all_weeks <- function(directory,
   return(big_df)
 }
 
+
 # ---------------------------------------------------------------------------------
-# ---------------------- Animate a Single Play in a Game --- ----------------------
+# ------------------------- Data Frame of Red Zone Plays --------------------------
+# ---------------------------------------------------------------------------------
+# pass in a dataframe; return a data frame of red zone plays.
+red_zone_plays <- function(game_df) {
+  redzone_df <- game_df %>%
+    filter(absoluteYardlineNumber<=10) %>%
+    data.frame()
+  return(redzone_df)
+}
+
+
+# ---------------------------------------------------------------------------------
+# ---------------------- Animate a Single Play in a Game --------------------------
 # ---------------------------------------------------------------------------------
 # pass in a dataframe where you have filtered the gameId and playId.
 
@@ -204,7 +217,7 @@ visualize_single_play <- function(game_df,
     }
   }
   
-  yardLine <- unique(game_df$absoluteYardlineNumber)
+  yardLine <- unique(game_df$absoluteYardlineNumber) + 20
   
   g <- g +
     # insert jersey number for each player
@@ -263,7 +276,7 @@ visualize_single_frame <- function(game_df,
   
   game_df <- game_df %>% filter(frameId == frame_number) %>% data.frame()
   
-  yardLine <- unique(game_df$absoluteYardlineNumber)
+  yardLine <- unique(game_df$absoluteYardlineNumber) + 20
   
   source('https://raw.githubusercontent.com/mlfurman3/gg_field/main/gg_field.R')
   
