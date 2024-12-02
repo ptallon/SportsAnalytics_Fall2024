@@ -217,7 +217,7 @@ visualize_single_play <- function(game_df,
     }
   }
   
-  yardLine <- unique(game_df$absoluteYardlineNumber) + 20
+  yardLine <- unique(game_df$absoluteYardlineNumber)
   
   g <- g +
     # insert jersey number for each player
