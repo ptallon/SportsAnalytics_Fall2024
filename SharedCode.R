@@ -167,7 +167,10 @@ red_zone_plays <- function(game_df) {
 # ---------------- Add Voronoi Polygon Coordinates to each x, y pair --------------
 # ---------------------------------------------------------------------------------
 # Compute Voronoi Polygons for each x,y pair. Include Voronoi area and Polygon coordinates.
+# Depending on the df size, this code could take several hours to run.
 include_voronoi_polygons_and_area <- function(df) {
+  
+  load_packages(c("deldir", "dplyr"))
   
   # Function to compute Voronoi tessellation for a group
   compute_voronoi <- function(data) {
