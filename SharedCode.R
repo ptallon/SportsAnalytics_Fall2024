@@ -164,6 +164,44 @@ red_zone_plays <- function(game_df) {
 
 
 # ---------------------------------------------------------------------------------
+# ---------------- Add Voronoi Polygon Coordinates to each x, y pair --------------
+# ---------------------------------------------------------------------------------
+# Compute Voronoi Polygons for each x,y pair. Include Voronoi area and Polygon coordinates.
+include_voronoi_polygons_and_area <- function(df) {
+  
+  # Function to compute Voronoi tessellation for a group
+  compute_voronoi <- function(data) {
+    # Perform Voronoi tessellation
+    voronoi <- deldir(data$x, data$y)
+  
+    # Extract areas
+    tryCatch(data$area <- voronoi$summary$dir.area, error = function(err){NA})
+  
+    # Extract polygons and add as a list-column
+    polygons <- tile.list(voronoi)
+    tryCatch(data$polygon <- lapply(polygons, function(p) {data.frame(x = p$x, y = p$y)}), error = function(err){NA})
+  
+    return(data)
+  }
+
+  frames_df <- df %>% 
+    filter(team != "football") %>%
+    group_by(gameId, playId, frameId) %>%
+    group_modify(~ compute_voronoi(.x)) %>%
+    ungroup() %>% 
+    data.frame()
+
+  football_df <- df %>% 
+    filter(team == "football") %>%
+    mutate(area = NA, polygon = NA) %>%
+    data.frame()
+
+  frames_df <- rbind(frames_df, football_df) %>% arrange(gameId, playId, frameId, team)
+  return(frames_df)
+}
+
+
+# ---------------------------------------------------------------------------------
 # ---------------------- Animate a Single Play in a Game --------------------------
 # ---------------------------------------------------------------------------------
 # pass in a dataframe where you have filtered the gameId and playId.
