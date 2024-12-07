@@ -168,7 +168,8 @@ red_zone_plays <- function(game_df) {
 # ---------------------------------------------------------------------------------
 # Compute Voronoi Polygons for each x,y pair. Include Voronoi area and Polygon coordinates.
 # Depending on the df size, this code could take several hours to run.
-include_voronoi_polygons_and_area <- function(df) {
+include_voronoi_polygons_and_area <- function(df,
+                                              remove_frames_before_lineset = FALSE) {
   
   load_packages(c("deldir", "dplyr"))
   
@@ -187,6 +188,10 @@ include_voronoi_polygons_and_area <- function(df) {
     return(data)
   }
 
+  if(remove_frames_before_lineset) {
+    df <- remove_frames_before_lineset(df, renumberFrames = TRUE)
+  }
+  
   frames_df <- df %>% 
     filter(team != "football") %>%
     group_by(gameId, playId, frameId) %>%
